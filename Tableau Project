@@ -1,3 +1,5 @@
+Tableu work book project https://public.tableau.com/views/Book1_16897871793710/Dashboard1?:language=en-US&:display_count=n&:origin=viz_share_link
+
 /*
 
 Queries used for Tableau Project
@@ -179,6 +181,100 @@ From PortfolioProject..CovidDeaths
 --Where location like '%states%'
 Group by Location, Population, date
 order by PercentPopulationInfected desc
+
+
+
+Python sql code
+
+import pandas as pd
+import numpy as np
+df = pd.read_csv("CovidDeaths1.csv")
+df = df.replace(np.nan, 0)
+functions = dir(np)
+print(functions)
+continent_af = df[(df["continent"] == "Africa")]
+continent_as = df[(df["continent"] == "Asia")]
+continent_eu = df[(df["continent"] == "Europe")]
+print(len(continent_af))
+print(len(continent_as))
+print(len(continent_eu))
+print(continent_as.head())
+
+continent_af.to_csv('continent_af.csv')
+continent_as.to_csv('continent_as.csv')
+continent_eu.to_csv('continent_eu.csv')
+
+
+list(continent_af.columns[1:9])
+list(continent_as.columns[1:9])
+list(continent_eu.columns[1:9])
+
+
+continent_af = continent_af.drop(columns=continent_af.columns[6:])
+continent_af.to_csv('mod_continent_af.csv')
+
+continent_as= continent_as.drop(columns=continent_as.columns[6:])
+continent_as.to_csv('mod_continent_as.csv')
+
+continent_eu = continent_eu.drop(columns=continent_eu.columns[6:])
+continent_eu.to_csv('mod_continent_eu.csv')
+#line of code drop colums 7 and onward 
+continent_af['result'] = continent_af['total_cases'].div(continent_af['population']) * 100
+print(continent_af)
+
+continent_as['result'] = continent_as['total_cases'].div(continent_as['population']) * 100
+print(continent_as)
+
+continent_eu['result'] = continent_eu['total_cases'].div(continent_eu['population']) * 100
+print(continent_eu)
+#//Covers the percntage of population that was infected with covid//
+
+
+continent_af = continent_af.sort_values('result', ascending=False)
+continent_as = continent_as.sort_values('result', ascending=False)
+continent_eu = continent_eu.sort_values('result', ascending=False)
+# sorts the greatest percantage of a givinen populations infection's 
+
+mod_continent_af = continent_af['total_cases'].sum()
+df.loc[row_index, 'sum_oftotal_cases'] = mod_continent_af
+print(mod_continent_af)
+continent_af.to_csv('mod_continent_af.csv', index=False)
+
+mod_continent_as = continent_as['total_cases'].sum()
+df.loc[row_index, 'sum_oftotal_cases'] = sum_b
+print(mod_continent_as)
+
+#This code sum up the total cases for continet_af.csv
+
+average_value = df['population'].mean()
+print(average_value)
+# This code finds the average population.
+
+average_total_cases = df['total_cases'].mean()
+print(average_total_cases)
+#This code find the average number of total cases. 
+
+
+filtered_df = df.query('new_cases > 500')
+print(filtered_df)
+filtered_df.to_csv('mod_continent')
+#This code is a query that filters all the time total cases were above 500. 
+
+
+filtered_cases = df[df['total_cases'] > 804676]
+filtered_population = df[df['population'] > 127593486]
+concatenated_df = pd.concat([filtered_cases, filtered_population])
+filtered_con_pop_cases = concatenated_df[['iso_code', 'continent', 'location', 'total_cases', 'population']]
+filtered_con_pop_cases.to_csv('filtered_con_pop_cases.csv', index=False)
+
+continent_af['total_of_all_cases'] = continent_af['total_cases'].sum()
+continent_af.to_csv('mod_continent_af.csv', index=False)
+
+
+
+continent_af.to_csv('mod_continent_af.csv', index=False)
+continent_as.to_csv('mod_continent_as.csv', index=False)
+continent_eu.to_csv('mod_continent_eu.csv', index=False)
 
 
 
